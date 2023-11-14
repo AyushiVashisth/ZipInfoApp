@@ -2,6 +2,11 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { clearLocation, fetchLocation } from "../Redux/actions";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import LocationInfo from "./LocationInfo";
+
+import bg from "../assets/bg.jpg"
 
 const ZipInput = () => {
   const [zipCode, setZipCode] = useState("");
@@ -15,91 +20,76 @@ const ZipInput = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    if (zipCode.length !== 6 || isNaN(zipCode)) {
+      toast.error("Zip code must be a 6-digit number");
+      return;
+    }
+
     dispatch(fetchLocation(zipCode));
   };
 
   const handleClear = () => {
     dispatch(clearLocation());
-    setZipCode('');
+    setZipCode("");
+    toast.error("clear location");
   };
 
   return (
     <div
-      className="bg-cover bg-center bg-fixed min-h-screen flex flex-col items-center justify-center"
+      className="relative bg-cover bg-center bg-fixed opacity-80 min-h-screen flex flex-col items-center justify-center"
       style={{
-        backgroundImage:
-          'url("https://lh6.googleusercontent.com/proxy/eMYodMBG9Y4Zdv75nne3ivEntNwvKjngXnRLvnlkRu8vWEYMiKFDw6zmc0KncRrM8WWdAxhoAuRSZsfAPxU=w1200-h630-p-k-no-nu")'
+        backgroundImage: `url(${bg})`,
       }}
     >
       <form
         onSubmit={handleSubmit}
-        className="w-full md:w-[70%] lg:w-[50%] mx-auto bg-black bg-opacity-50 backdrop-blur-lg rounded-lg shadow-lg p-8 mb-8 flex flex-col md:flex-row items-center justify-between"
+        className="w-full md:w-[70%] lg:w-[50%] mx-auto bg-black bg-opacity-10 backdrop-blur-sm rounded-lg shadow-lg p-4 mb-8 flex flex-col md:flex-row items-center justify-center z-1"
+        
       >
         <input
-          type="text"
+          type="number"
           value={zipCode}
           placeholder="Enter Zip Code"
-          className={`w-full md:w-[70%] bg-gray-800 text-white p-3 rounded-t-md md:rounded-l-md md:rounded-t-none ${
+          className={`w-full md:w-[70%] bg-gray-500 text-white p-3 rounded-t-md md:rounded-l-md md:rounded-t-none ${
             error ? "border-red-500" : "border-gray-700"
           }`}
           onChange={handleZipCodeChange}
         />
         <button
           type="submit"
-          className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-6 rounded-b-md md:rounded-r-md md:rounded-b-none mt-2 md:mt-0 transition duration-300 ease-in-out transform hover:scale-105"
+          className="bg-[#4c545f] text-white font-bold py-3 px-6 rounded mt-2 md:mt-0 transition duration-300 ease-in-out transform hover:scale-105"
         >
           Search
         </button>
       </form>
-      <div className="text-white w-full md:w-[70%] lg:w-[30%]">
+      <div className="text-white">
         {loading ? (
           <div className="flex items-center justify-center mb-4">
-          <div className="animate-spin h-16 w-16 border-t-4 border-blue-800 rounded-full"></div>
-        </div>
-          ) : (
+            <div className="animate-spin h-16 w-16 border-t-4 border-blue-800 rounded-full"></div>
+          </div>
+        ) : (
           <>
             {error ? (
-              <p className="text-red-500 border-2 p-6 bg-black bg-opacity-50 backdrop-blur-lg rounded-lg shadow-lg w-auto text-center mb-8 ">{error}</p>
+              <p className="text-red-500 border-2 p-6 bg-black bg-opacity-50 backdrop-blur-lg rounded-lg shadow-lg w-auto text-center mb-8 ">
+                {error}
+              </p>
             ) : (
-              location && (
-                <>
-                  <div className="border-2 p-6 bg-black bg-opacity-70 backdrop-blur-lg rounded-lg shadow-lg w-auto text-center mb-8 ">
-                    <h2 className="text-2xl font-bold mb-4">
-                      Location Information
-                    </h2>
-                    <div className="flex flex-col items-center">
-                      <p>Country: {location.country}</p>
-                      <p>Abbreviation: {location.countryAbbreviation}</p>
-                    </div>
-                  </div>
-                  <div className="w-full flex justify-center">
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
-                      {location.nearbyPlaces.map((place) => (
-                        <div
-                          key={place.placeName}
-                          className="border-2 text-center bg-black bg-opacity-70 backdrop-blur-lg rounded-lg shadow-lg"
-                        >
-                          <p className="text-xl font-bold mt-4">{place.placeName}</p>
-                          <p>{place.state}</p>
-                          <p>Longitude: {place.longitude}</p>
-                          <p>Latitude: {place.latitude}</p>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </>
-              )
+              location && <LocationInfo location={location}/>
             )}
           </>
         )}
       </div>
-      <button
-        type="button"
-        className="border-2 text-white border-red-500 ml-2 p-3 rounded bg-red-500 hover:bg-red-600 transition duration-300 ease-in-out transform hover:scale-105"
-        onClick={handleClear}
-      >
-        Clear
-      </button>
+      {(location || error) && (
+        <button
+          type="button"
+          className="text-white font-bold ml-2 p-3 rounded bg-[#4c545f] transition duration-300 ease-in-out transform hover:scale-105 z-2 mt-10"
+          onClick={handleClear}
+        >
+          Clear
+        </button>
+      )}
+      <ToastContainer position="bottom-right" />
     </div>
   );
 };
