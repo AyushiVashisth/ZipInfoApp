@@ -71,8 +71,10 @@ The Zip Code Information App is a React application designed to provide users wi
 ![Screenshot 2023-11-14 165610](https://github.com/AyushiVashisth/ZipInfoApp/assets/107119119/9cdbbde1-4f4b-4709-9b35-e36caf8c887a)
 
 ### Mobile
-![Screenshot 2023-11-14 165702](https://github.com/AyushiVashisth/ZipInfoApp/assets/107119119/658420e7-2722-420d-b1a1-412fae2b3bb3)
-![Screenshot 2023-11-14 165711](https://github.com/AyushiVashisth/ZipInfoApp/assets/107119119/928df751-81ad-4022-9202-67b90e5fda79)
+<div >
+  <img width="46%" src="https://github.com/AyushiVashisth/ZipInfoApp/assets/107119119/658420e7-2722-420d-b1a1-412fae2b3bb3" alt="react">
+  <img width="46%" src="https://github.com/AyushiVashisth/ZipInfoApp/assets/107119119/928df751-81ad-4022-9202-67b90e5fda79" alt="tailwindcss">
+</div>
 
 
 <h2 align="center">Project Structure:</h2>
